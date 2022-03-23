@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /*
     Clase Card
@@ -223,25 +226,47 @@ class Deck{
 }
 
 public class Actividad8 {
+
+    /*
+    showMenu
+    Requiere un Deck como parametro para poder mandar llamar los metodos correspondientes
+    Metodo que pide al usuario un numero y llama un metodo asociado
+    Utiliza recursion para mostrar el menu otra vez hasta que el usuario desee salir
+    */
+    public static void showMenu(Deck mazo){
+        int opcion = 0;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("\nBienvenido a Poker!\nSelecciona una opción:\n1 Mezclar deck\n2 Sacar una carta\n3 Carta al azar\n4 Generar una mano de 5 cartas\n0 Salir\n");
+        try {
+            opcion = Integer.parseInt(reader.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        switch(opcion){
+            case 0:
+                return;
+            case 1:
+                mazo.shuffle();
+                break;
+            case 2:
+                mazo.head();
+                break;
+            case 3:
+                mazo.pick();
+                break;
+            case 4:
+                mazo.hand();
+                break;
+            default:
+                System.out.println("Opción no valida, por favor inserte un numero del 0 al 4");
+                break;
+        }
+        showMenu(mazo);
+    }
     //main
     public static void main(String args[]) {
         //construccion del mazo
         Deck mazo = new Deck();
-        //para pruebas se sacara la primer mano, la siguiente carta y una aleatoria del deck
-        //luego se mezclara el mazo y se repetira el proceso, deben de dar valores distintos
-        System.out.println("Primer hand");
-        mazo.hand();
-        System.out.println("Head");
-        mazo.head();
-        System.out.println("Pick");
-        mazo.pick();
-        System.out.println("Shuffle de todo el deck");
-        mazo.shuffle();
-        System.out.println("Segunda hand");
-        mazo.hand();
-        System.out.println("Head");
-        mazo.head();
-        System.out.println("Pick");
-        mazo.pick();
+        showMenu(mazo);
     }
 }
