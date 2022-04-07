@@ -3,6 +3,8 @@ import java.util.Random;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.*;
+import java.util.*;
 
 /*
     Clase Card
@@ -53,7 +55,7 @@ class Deck{
     //head
     //trae el primer valor del maso y lo expulsa del mazo
     //si no hay cartas en el mazo notifica al usuario
-    public void head(){
+    public void head() throws Exception{
         if(remainingCards > 0){
             this.cardDeck.get(0).imprimirCarta();
             this.cardDeck.remove(0);
@@ -61,7 +63,8 @@ class Deck{
             System.out.println("Quedan " + this.remainingCards);
         }
         else{
-            System.out.println("Ya no hay cartas en el Deck");
+            throw new Exception("Se han agotado las cartas");
+            //System.out.println("Ya no hay cartas en el Deck");
         }
     }
 
@@ -182,7 +185,7 @@ class Deck{
     //hand
     //remueve 5 cartas del mazo y las muestra al usuario
     //notifica al usuario si falla debido a falta de cartas disponibles
-    public void hand(){
+    public void hand() throws Exception{
         if(remainingCards >= 5){
             //siempre se utiliza la posicion 0 dado que se van removiendo tras cada impresion
             this.cardDeck.get(0).imprimirCarta();
@@ -199,7 +202,8 @@ class Deck{
             System.out.println("Quedan " + this.remainingCards);
         }
         else{
-            System.out.println("No hay suficientes cartas en el Deck");
+            throw new Exception("Se han agotado las cartas");
+            //System.out.println("No hay suficientes cartas en el Deck");
         }
     }
 
@@ -207,7 +211,7 @@ class Deck{
     //calcula un numero al azar y muestra la carta en dicha posicion
     //posteriormente remueve la carta del mazo
     //notifica al usuario si falla dado que el mazo esta vacio
-    public void pick(){
+    public void pick() throws Exception{
         if(remainingCards > 0){
             //busca un numero al azar dentro del rango de cartas disponibles
             Random randomNumbers = new Random();
@@ -220,7 +224,8 @@ class Deck{
             System.out.println("Quedan " + this.remainingCards);
         }
         else{
-            System.out.println("Ya no hay cartas en el Deck");
+            throw new Exception("Se han agotado las cartas");
+            //System.out.println("Ya no hay cartas en el Deck");
         }
     }
 }
@@ -233,7 +238,7 @@ public class Actividad8 {
     Metodo que pide al usuario un numero y llama un metodo asociado
     Utiliza recursion para mostrar el menu otra vez hasta que el usuario desee salir
     */
-    public static void showMenu(Deck mazo){
+    public static void showMenu(Deck mazo) throws Exception{
         int opcion = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("\nBienvenido a Poker!\nSelecciona una opción:\n1 Mezclar deck\n2 Sacar una carta\n3 Carta al azar\n4 Generar una mano de 5 cartas\n0 Salir\n");
@@ -244,7 +249,7 @@ public class Actividad8 {
         }
         switch(opcion){
             case 0:
-                return;
+                System.exit(0);
             case 1:
                 mazo.shuffle();
                 break;
@@ -258,15 +263,22 @@ public class Actividad8 {
                 mazo.hand();
                 break;
             default:
-                System.out.println("Opción no valida, por favor inserte un numero del 0 al 4");
-                break;
+                //System.out.println("Opción no valida, por favor inserte un numero del 0 al 4");
+                throw new Exception("Opción no válida");
         }
-        showMenu(mazo);
+        //showMenu(mazo);
     }
     //main
     public static void main(String args[]) {
         //construccion del mazo
         Deck mazo = new Deck();
-        showMenu(mazo);
+        while(true){
+            try{
+                showMenu(mazo);
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }
